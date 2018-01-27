@@ -21,7 +21,12 @@ router.register(r'medias', projectx.views.MediaViewSet, base_name='medias')
 
 urlpatterns = [
 
+	# Authentication
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
+    # API Endpoints
 	url(r'^api-v1/', include(router.urls)),
+	url(r'get_self', projectx.views.get_self),
 
 	# Landing Page
 	url(r'^', projectx.views.index, name='index')

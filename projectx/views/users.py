@@ -2,7 +2,7 @@
 
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from rest_framework.decorators import permission_classes
+from rest_framework.decorators import permission_classes, api_view
 
 from projectx.models import *
 from projectx.serializers import *
@@ -36,3 +36,18 @@ class MainUserViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+'''
+    Retrieves the requester's user details
+'''
+@api_view(['GET'])
+@permission_classes((AuthenticatedPermission, ))
+def get_self(request):
+    if request.user._user_type == BaseUser.MAIN_USER_TYPE:
+        serializer = CustomerSerializer(request.user)
+    elif request.user.is_superuser:
+        return Response({"id": request.user.id}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "invalid user"}, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.data, status=status.HTTP_200_OK)

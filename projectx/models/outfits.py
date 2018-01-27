@@ -11,12 +11,12 @@ from projectx.models.helpers import make_thumbnail, item_upload_path
     Model representing an outfit of a user in the app
 '''
 class Outfit(models.Model):
-	user = models.ForeignKey(MainUser, on_delete=models.CASCADE)
-	description = models.CharField(max_length=500)
+    user = models.ForeignKey(MainUser, on_delete=models.CASCADE)
+    description = models.CharField(max_length=500)
 
 
 class Media(models.Model):
-	# media type
+    # media type
     UNKNOWN_TYPE = 'U'
     IMAGE_TYPE = 'I'
     VIDEO_TYPE = 'V'
@@ -27,11 +27,11 @@ class Media(models.Model):
         (VIDEO_TYPE, 'Video'),
     )
 
-	media_type = models.CharField(max_length=1, choices=MEDIA_TYPE_OPTIONS, default=UNKNOWN_TYPE)
-	media = models.FileField(upload_to=item_upload_path, null=True, blank=True)
+    media_type = models.CharField(max_length=1, choices=MEDIA_TYPE_OPTIONS, default=UNKNOWN_TYPE)
+    media = models.FileField(upload_to=item_upload_path, null=True, blank=True)
     thumbnail = models.FileField(upload_to=item_upload_path, null=True, blank=True)
 
-   	def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
         super(Item, self).save(*args, **kwargs)
 
         # Make and save the thumbnail for the photo here.
